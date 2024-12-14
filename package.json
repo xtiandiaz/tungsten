@@ -1,0 +1,23 @@
+{
+  "name": "tungsten",
+  "version": "1.0.0",
+  "description": "A TypeScript module of resources and functions, daily used in other projects as the conductive wire to lighten their utility.",
+  "main": "main.mts",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/xtiandiaz/tungsten.git"
+  },
+  "author": "Cristian Díaz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xtiandiaz/tungsten/issues"
+  },
+  "homepage": "https://github.com/xtiandiaz/tungsten#readme",
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
