@@ -12,3 +12,7 @@ export const hexString = (colorValue: number, alpha: number = 1) => {
   
   return fullHexString
 }
+
+export const substringFromIndices = (string: string, indices: number[]): string => {
+  return indices.map(i => string[i]).join('')
+}

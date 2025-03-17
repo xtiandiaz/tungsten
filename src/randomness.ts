@@ -55,18 +55,3 @@ export function weightedChoice<T>(selection: T[], weights: number[]): T {
   }
   return choice(selection, weights.map((w) => Probability.value(w, totalWeight)))
 }
-
-export function shuffle<T>(array: T[]): T[] {
-  let currentIndex = array.length
-  let randomIndex: number
-
-  while (currentIndex != 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex--
-
-    const currentElement = array[currentIndex]
-    array[currentIndex] = array[randomIndex]
-    array[randomIndex] = currentElement
-  }
-  return array
-}

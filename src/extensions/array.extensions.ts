@@ -5,7 +5,7 @@ declare global {
   }
   
   interface Array<T> {
-    contains(element: T): boolean
+    shuffle(): this
   }
 }
 
@@ -15,7 +15,6 @@ export function range(start: number, end: number, step: number = 1) {
     (_, key) => key * step + start
   )
 }
-
 export function closedRange(start: number, end: number, step: number = 1) {
   return range(start, end + step, step)
 }
@@ -23,6 +22,14 @@ export function closedRange(start: number, end: number, step: number = 1) {
 Array.range = range
 Array.closedRange = closedRange
 
-Array.prototype.contains = function<T>(this: Array<T>, element: T) {
-  return this.findIndex(el => el === element) !== -1
+/*
+  Fisher-Yates Sorting Algorithm
+  Taken from: https://www.freecodecamp.org/news/how-to-shuffle-an-array-of-items-using-javascript-or-typescript/
+*/
+Array.prototype.shuffle = function<T>(this: Array<T>) {
+  for (let i = this.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [this[i], this[j]] = [this[j], this[i]]
+  }
+  return this
 }
