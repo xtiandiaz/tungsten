@@ -4,7 +4,13 @@ declare global {
     closedRange(start: number, end: number, step: number): number[]
   }
   
+  type MapCallbackfn<T, U> = (value: T, index: number, array: T[]) => U | undefined
+  
   interface Array<T> {
+    first: () => T | undefined
+    last: () => T | undefined
+    
+    compactMap<U>(callbackfn: MapCallbackfn<T, U>): Array<U>
     shuffle(): this
   }
 }
@@ -21,6 +27,18 @@ export function closedRange(start: number, end: number, step: number = 1) {
 
 Array.range = range
 Array.closedRange = closedRange
+
+Array.prototype.first = function<T>(this: Array<T>): T | undefined {
+  return this.length > 0 ? this[0] : undefined
+}
+
+Array.prototype.last = function<T>(this: Array<T>): T | undefined {
+  return this.length > 0 ? this[this.length - 1] : undefined
+}
+
+Array.prototype.compactMap = function<T, U>(this: Array<T>, callbackfn: MapCallbackfn<T, U>): Array<U> {
+  return this.map(callbackfn).filter(v => v !== undefined)
+}
 
 /*
   Fisher-Yates Sorting Algorithm
