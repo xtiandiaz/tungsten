@@ -11,7 +11,9 @@ declare global {
     last: () => T | undefined
     
     compactMap<U>(callbackfn: MapCallbackfn<T, U>): Array<U>
+    reversed(): Array<T>
     shuffle(): this
+    shuffled(): Array<T>
   }
 }
 
@@ -40,6 +42,10 @@ Array.prototype.compactMap = function<T, U>(this: Array<T>, callbackfn: MapCallb
   return this.map(callbackfn).filter(v => v !== undefined)
 }
 
+Array.prototype.reversed = function<T>(this: Array<T>) {
+  return [...this].reverse()
+}
+
 /*
   Fisher-Yates Sorting Algorithm
   Taken from: https://www.freecodecamp.org/news/how-to-shuffle-an-array-of-items-using-javascript-or-typescript/
@@ -50,4 +56,8 @@ Array.prototype.shuffle = function<T>(this: Array<T>) {
     [this[i], this[j]] = [this[j], this[i]]
   }
   return this
+}
+
+Array.prototype.shuffled = function<T>(this: Array<T>) {
+  return [...this].shuffle()
 }
