@@ -1,18 +1,18 @@
 import { ParameterError } from './error'
 import * as Probability from './probability'
 
-export function randomSign(probabilities: number[] = [0.5]): number {
-  return randomChoice([1, -1], probabilities)
+export function getRandomSign(probabilities: number[] = [0.5]): number {
+  return getRandomChoice([1, -1], probabilities)
 }
 
-export function randomInteger(min: number, max: number): number {
+export function getRandomInteger(min: number, max: number): number {
   min = Math.floor(min)
   max = Math.floor(max)
   
   return min + Math.round(Math.random() * (max - min))
 }
 
-export function randomChoice<T>(selection: T[], probabilities: number[] = []): T {
+export function getRandomChoice<T>(selection: T[], probabilities: number[] = []): T {
   if (selection.length < 1) {
     console.log(ParameterError.Shortfall, `Selection: ${selection}`)
   }
@@ -45,7 +45,7 @@ export function randomChoice<T>(selection: T[], probabilities: number[] = []): T
   return choice ?? choices[0].el
 }
 
-export function randomWeightedChoice<T>(selection: T[], weights: number[]): T {
+export function getRandomWeightedChoice<T>(selection: T[], weights: number[]): T {
   if (selection.length < 2 || weights.length != selection.length) {
     console.log(ParameterError.Unbalance, `Selection: ${selection}, weights: ${weights}`)
   }
@@ -53,5 +53,5 @@ export function randomWeightedChoice<T>(selection: T[], weights: number[]): T {
   if (totalWeight <= 0) {
     console.log(ParameterError.OutOfRange, `Total weight ${totalWeight} <= 0`)
   }
-  return randomChoice(selection, weights.map((w) => Probability.value(w, totalWeight)))
+  return getRandomChoice(selection, weights.map((w) => Probability.value(w, totalWeight)))
 }
