@@ -16,15 +16,19 @@ export function getRandomChoice<T>(selection: T[], probabilities: number[] = [])
   if (selection.length < 1) {
     console.log(ParameterError.Shortfall, `Selection: ${selection}`)
   }
+  
   const totalProb = probabilities.reduce((acc, curVal) => acc + curVal, 0)
-  if (totalProb > 1) {
-    console.log(ParameterError.Shortfall, `Probabilities: ${probabilities}`)
+  const errorMargin = 0.001
+  if ((totalProb - errorMargin) > 1) {
+    console.log(ParameterError.Shortfall, `Probabilities: ${probabilities}`, 'totalProb:', totalProb)
   }
+  
   if (probabilities.length < selection.length) {
     const diff = selection.length - probabilities.length
     const probShare = (1 - totalProb) / diff
-    probabilities = probabilities.concat([...Array(diff).keys()].map((_) => probShare))
+    probabilities = probabilities.concat([...Array(diff).keys()].map(() => probShare))
   }
+  
   const choices = selection
     .map((c, i) => { return { el: c, prob: probabilities[i] } })
     .sort((a, b) => b.prob - a.prob)
@@ -37,6 +41,7 @@ export function getRandomChoice<T>(selection: T[], probabilities: number[] = [])
         return choice.el
       }
     }
+    
     return undefined
   })()
   
@@ -46,12 +51,16 @@ export function getRandomChoice<T>(selection: T[], probabilities: number[] = [])
 }
 
 export function getRandomWeightedChoice<T>(selection: T[], weights: number[]): T {
+  // console.log(selection, weights)
+  
   if (selection.length < 2 || weights.length != selection.length) {
     console.log(ParameterError.Unbalance, `Selection: ${selection}, weights: ${weights}`)
   }
+  
   const totalWeight = weights.reduce((acc, curVal) => acc + curVal, 0)
   if (totalWeight <= 0) {
     console.log(ParameterError.OutOfRange, `Total weight ${totalWeight} <= 0`)
   }
+  
   return getRandomChoice(selection, weights.map((w) => Probability.value(w, totalWeight)))
 }
