@@ -51,8 +51,6 @@ export function getRandomChoice<T>(selection: T[], probabilities: number[] = [])
 }
 
 export function getRandomWeightedChoice<T>(selection: T[], weights: number[]): T {
-  // console.log(selection, weights)
-  
   if (selection.length < 2 || weights.length != selection.length) {
     console.log(ParameterError.Unbalance, `Selection: ${selection}, weights: ${weights}`)
   }
