@@ -1,5 +1,4 @@
 declare global {
-  
   interface String {
     removeLeadingAndTrailingSpaces(): string  
   }
@@ -8,3 +7,5 @@ declare global {
 String.prototype.removeLeadingAndTrailingSpaces = function(this: string): string {
   return this
 }
+
+export {}
