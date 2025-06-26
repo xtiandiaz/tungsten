@@ -5,7 +5,10 @@ declare global {
 }
 
 String.prototype.removeLeadingAndTrailingSpaces = function(this: string): string {
-  return this
+  const matches = this.match(/^\s*(.*\S)\s*$/)
+  // console.log(matches)
+
+  return matches ? matches[1] : ''
 }
 
 export {}
