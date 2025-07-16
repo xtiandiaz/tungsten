@@ -15,6 +15,7 @@ declare global {
     reversed(): Array<T>
     shuffle(): this
     shuffled(): Array<T>
+    uniqued(): Array<T>
   }
 }
 
@@ -79,4 +80,8 @@ Array.prototype.shuffle = function<T>(this: Array<T>) {
 
 Array.prototype.shuffled = function<T>(this: Array<T>) {
   return [...this].shuffle()
+}
+
+Array.prototype.uniqued = function<T>(this: Array<T>) {
+  return [...new Set<T>(this)]
 }
