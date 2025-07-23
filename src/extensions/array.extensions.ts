@@ -7,8 +7,8 @@ declare global {
   type MapCallbackfn<T, U> = (value: T, index: number, array: T[]) => U | undefined
   
   interface Array<T> {
-    first: () => T | undefined
-    last: () => T | undefined
+    first: (predicate?: (value: T, index: number) => boolean) => T | undefined
+    last: (predicate?: (value: T, index: number) => boolean) => T | undefined
     
     compactMap<U>(callbackfn: MapCallbackfn<T, U>): Array<U>
     groupedBy<T extends object, U extends string | number>(selector: (value: T) => U): T[][]
@@ -33,11 +33,25 @@ export const closedRange = (start: number, end: number, step: number = 1) => {
 Array.range = range
 Array.closedRange = closedRange
 
-Array.prototype.first = function<T>(this: Array<T>): T | undefined {
+Array.prototype.first = function<T>(
+  this: Array<T>, 
+  predicate?: (value: T, index: number) => boolean
+): T | undefined {
+  if (predicate) {
+    const index = this.findIndex((v, i) => predicate(v, i))
+    return index >= 0 ? this[index] : undefined
+  }
   return this.length > 0 ? this[0] : undefined
 }
 
-Array.prototype.last = function<T>(this: Array<T>): T | undefined {
+Array.prototype.last = function<T>(
+  this: Array<T>,
+  predicate?: (value: T, index: number) => boolean
+): T | undefined {
+  if (predicate) {
+    const index = this.findIndex((v, i, arr) => predicate(v, arr.length - i - 1))
+    return index >= 0 ? this[index] : undefined
+  }
   return this.length > 0 ? this[this.length - 1] : undefined
 }
 
