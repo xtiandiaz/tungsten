@@ -1,41 +1,58 @@
-declare global {
+declare global {  
   interface ArrayConstructor {
-    range(start: number, end: number, step: number): number[]
     closedRange(start: number, end: number, step: number): number[]
+    range(start: number, end: number, step: number): number[]
   }
   
   type MapCallbackfn<T, U> = (value: T, index: number, array: T[]) => U | undefined
   
   interface Array<T> {
-    first: () => T | undefined
-    last: () => T | undefined
+    first: (predicate?: (value: T, index: number) => boolean) => T | undefined
+    last: (predicate?: (value: T, index: number) => boolean) => T | undefined
     
     compactMap<U>(callbackfn: MapCallbackfn<T, U>): Array<U>
     remove(predicate: (value: T, index: number) => boolean): this
+    groupedBy<T extends object, U extends string | number>(selector: (value: T) => U): T[][]
     reversed(): Array<T>
     shuffle(): this
     shuffled(): Array<T>
+    uniqued(): Array<T>
   }
 }
 
-export function range(start: number, end: number, step: number = 1) {
+export const range = (start: number, end: number, step: number = 1) => {
   return Array.from(
     { length: Math.floor((end - start) / step) }, 
     (_, key) => key * step + start
   )
 }
-export function closedRange(start: number, end: number, step: number = 1) {
+
+export const closedRange = (start: number, end: number, step: number = 1) => {
   return range(start, end + step, step)
 }
 
 Array.range = range
 Array.closedRange = closedRange
 
-Array.prototype.first = function<T>(this: Array<T>): T | undefined {
+Array.prototype.first = function<T>(
+  this: Array<T>, 
+  predicate?: (value: T, index: number) => boolean
+): T | undefined {
+  if (predicate) {
+    const index = this.findIndex((v, i) => predicate(v, i))
+    return index >= 0 ? this[index] : undefined
+  }
   return this.length > 0 ? this[0] : undefined
 }
 
-Array.prototype.last = function<T>(this: Array<T>): T | undefined {
+Array.prototype.last = function<T>(
+  this: Array<T>,
+  predicate?: (value: T, index: number) => boolean
+): T | undefined {
+  if (predicate) {
+    const index = this.findIndex((v, i, arr) => predicate(v, arr.length - i - 1))
+    return index >= 0 ? this[index] : undefined
+  }
   return this.length > 0 ? this[this.length - 1] : undefined
 }
 
@@ -49,6 +66,23 @@ Array.prototype.remove = function<T>(this: Array<T>, predicate: (value: T, index
     this.splice(index, 1)
   }
   return this
+}
+
+Array.prototype.groupedBy = function<T extends object, U extends string | number>(
+  this: Array<T>, 
+  keySelector: (element: T) => U
+): T[][] {
+  return this.reduce((groups, value) => {
+    const key = keySelector(value)
+    const group = groups.find(g => keySelector(g[0]) == key)
+    if (group) {
+      group.push(value)
+    } else {
+      groups.push([value])
+    }
+    
+    return groups
+  }, new Array<T[]>())
 }
 
 Array.prototype.reversed = function<T>(this: Array<T>) {
@@ -69,4 +103,8 @@ Array.prototype.shuffle = function<T>(this: Array<T>) {
 
 Array.prototype.shuffled = function<T>(this: Array<T>) {
   return [...this].shuffle()
+}
+
+Array.prototype.uniqued = function<T>(this: Array<T>) {
+  return [...new Set<T>(this)]
 }

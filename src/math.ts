@@ -1,3 +1,8 @@
+export interface Fraction {
+  numerator: number
+  denominator: number
+}
+
 export function round(num: number, fractionDigits: number): number {
   return Number(num.toFixed(fractionDigits))
 }
@@ -12,4 +17,10 @@ export function gcd(a: number, b: number) {
     return a
   }
   return gcd(b, a % b)
+}
+
+export function simplifyFraction(f: Fraction): Fraction {
+  const _gcd = gcd(f.numerator, f.denominator)
+  
+  return { numerator: f.numerator / _gcd, denominator: f.denominator / _gcd }
 }
