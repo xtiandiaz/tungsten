@@ -11,6 +11,7 @@ declare global {
     last: () => T | undefined
     
     compactMap<U>(callbackfn: MapCallbackfn<T, U>): Array<U>
+    remove(predicate: (value: T, index: number) => boolean): this
     reversed(): Array<T>
     shuffle(): this
     shuffled(): Array<T>
@@ -40,6 +41,14 @@ Array.prototype.last = function<T>(this: Array<T>): T | undefined {
 
 Array.prototype.compactMap = function<T, U>(this: Array<T>, callbackfn: MapCallbackfn<T, U>): Array<U> {
   return this.map(callbackfn).filter(v => v !== undefined)
+}
+
+Array.prototype.remove = function<T>(this: Array<T>, predicate: (value: T, index: number) => boolean) {
+  const index = this.findIndex(predicate)
+  if (index >= 0) {
+    this.splice(index, 1)
+  }
+  return this
 }
 
 Array.prototype.reversed = function<T>(this: Array<T>) {
