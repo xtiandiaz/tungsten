@@ -37,7 +37,7 @@ export function getRandomChoice<T>(selection: T[], probabilities: number[] = [])
     let accProb = 0
     for (const choice of choices) {
       accProb += choice.prob
-      if (randProb <= accProb) {
+      if (accProb >= randProb) {
         return choice.el
       }
     }

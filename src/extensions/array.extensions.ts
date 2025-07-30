@@ -2,6 +2,7 @@ declare global {
   interface ArrayConstructor {
     closedRange(start: number, end: number, step: number): number[]
     range(start: number, end: number, step: number): number[]
+    zip<T, U>(array1: T[], array2: U[]): [T, U][]
   }
   
   type MapCallbackfn<T, U> = (value: T, index: number, array: T[]) => U | undefined
@@ -19,6 +20,10 @@ declare global {
   }
 }
 
+export const closedRange = (start: number, end: number, step: number = 1) => {
+  return range(start, end + step, step)
+}
+
 export const range = (start: number, end: number, step: number = 1) => {
   return Array.from(
     { length: Math.floor((end - start) / step) }, 
@@ -26,12 +31,13 @@ export const range = (start: number, end: number, step: number = 1) => {
   )
 }
 
-export const closedRange = (start: number, end: number, step: number = 1) => {
-  return range(start, end + step, step)
+export const zip = <T, U>(array1: T[], array2: U[]): [T, U][] => {
+  return array1.map((t, i) => [t, array2[i]])
 }
 
-Array.range = range
 Array.closedRange = closedRange
+Array.range = range
+Array.zip = zip
 
 Array.prototype.first = function<T>(
   this: Array<T>, 
