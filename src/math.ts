@@ -1,3 +1,8 @@
+export interface Range {
+  min: number
+  max: number
+}
+
 export interface Fraction {
   numerator: number
   denominator: number
