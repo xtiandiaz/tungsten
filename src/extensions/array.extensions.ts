@@ -1,7 +1,7 @@
 declare global {  
   interface ArrayConstructor {
-    closedRange(start: number, end: number, step: number): number[]
-    range(start: number, end: number, step: number): number[]
+    closedRange(start: number, end: number, step?: number): number[]
+    range(start: number, end: number, step?: number): number[]
     zip<T, U>(array1: T[], array2: U[]): [T, U][]
   }
   
@@ -13,19 +13,25 @@ declare global {
     
     compactMap<U>(callbackfn: MapCallbackfn<T, U>): Array<U>
     groupedBy<T extends object, U extends string | number>(selector: (value: T) => U): T[][]
+    equals(other: T[]): boolean
     remove(predicate: (value: T, index: number) => boolean): this
     reversed(): Array<T>
     shuffle(): this
     shuffled(): Array<T>
+    sorted(): Array<T>
     uniqued(): Array<T>
   }
 }
 
-export const closedRange = (start: number, end: number, step: number = 1) => {
+export const closedRange = (start: number, end: number, step?: number) => {
+  step = step ?? 1
+  
   return range(start, end + step, step)
 }
 
-export const range = (start: number, end: number, step: number = 1) => {
+export const range = (start: number, end: number, step?: number) => {
+  step = step ?? 1
+  
   return Array.from(
     { length: Math.floor((end - start) / step) }, 
     (_, key) => key * step + start
@@ -64,6 +70,10 @@ Array.prototype.last = function<T>(
 
 Array.prototype.compactMap = function<T, U>(this: Array<T>, callbackfn: MapCallbackfn<T, U>): Array<U> {
   return this.map(callbackfn).filter(v => v !== undefined)
+}
+
+Array.prototype.equals = function<T>(this: Array<T>, other: T[]): boolean {
+  return JSON.stringify(this) === JSON.stringify(other)
 }
 
 Array.prototype.groupedBy = function<T extends object, U extends string | number>(
@@ -109,6 +119,10 @@ Array.prototype.shuffle = function<T>(this: Array<T>) {
 
 Array.prototype.shuffled = function<T>(this: Array<T>) {
   return [...this].shuffle()
+}
+
+Array.prototype.sorted = function<T>(this: Array<T>) {
+  return [...this].sort()
 }
 
 Array.prototype.uniqued = function<T>(this: Array<T>) {

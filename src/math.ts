@@ -8,12 +8,12 @@ export interface Fraction {
   denominator: number
 }
 
-export function round(num: number, fractionDigits: number): number {
-  return Number(num.toFixed(fractionDigits))
+export function round(value: number, fractionDigits: number): number {
+  return Number(value.toFixed(fractionDigits))
 }
 
-export function clamp(num: number, min: number, max: number): number {
-  return Math.max(min, Math.min(num, max))
+export function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(value, max))
 }
 
 /* Greatest Commmon Denominator/Divisor */
