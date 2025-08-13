@@ -16,6 +16,10 @@ export function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(value, max))
 }
 
+export function clampInRange(value: number, range: Range): number {
+  return clamp(value, range.min, range.max)
+}
+
 /* Greatest Commmon Denominator/Divisor */
 export function gcd(a: number, b: number) {
   if (b == 0) {

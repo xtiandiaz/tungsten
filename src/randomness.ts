@@ -15,6 +15,7 @@ export function getRandomInteger(min: number, max: number): number {
 export function getRandomChoice<T>(selection: T[], probabilities: number[] = []): T {
   if (selection.length < 1) {
     console.log(ParameterError.Shortfall, `Selection: ${selection}`)
+    return selection[0]
   }
   
   const totalProb = probabilities.reduce((acc, curVal) => acc + curVal, 0)
